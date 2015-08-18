@@ -1,0 +1,121 @@
+<%= form_for @property, :html => { :class => "form-horizontal property" } do |f| %>
+
+    <% if @property.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@property.errors.count, "error") %> prohibited this property from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @property.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:name]) %>
+  </div>
+    <div class="control-group">
+      <%= f.label "Foto Principal", :class => 'control-label' %>
+      <br/>
+      <% if action_name == 'edit' %>
+          <%= image_tag @property.photo.url, width: '150', class: 'img-thumbnail' if @property.photo? %>
+      <% end %>
+      <div class="controls">
+        <%= f.file_field :photo,accept: 'image/*' ,:class => 'form-control' %>
+      </div>
+      <%= error_span(@property[:photo]) %>
+    </div>
+
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, :class => 'form-control ckeditor' %>
+    </div>
+    <%= error_span(@property[:description]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :rooms, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :rooms, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:rooms]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :bathrooms, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :bathrooms, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:bathrooms]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :construction, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :construction, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:construction]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :ground, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :ground, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:ground]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :parking, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :parking, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:parking]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :price, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :price, :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:price]) %>
+  </div>
+    <% if current_agent.admin? %>
+        <div class="field">
+          <%= f.label 'Agente' %><br>
+          <%= f.select :agent_id, set_agents.collect{|a| [a.email, a.id]}, {}, class: 'form-control' %>
+        </div>
+    <% else %>
+        <%= f.hidden_field :agent_id, value: current_agent.id %>
+    <% end %>
+  <div class="control-group">
+    <%= f.label :property_type_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :property_type_id,set_types.collect{|c|[c.name, c.id]},{} , :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:property_type_id]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :property_category_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :property_category_id,set_categories.collect{|c|[c.name, c.id]},{} , :class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:property_category_id]) %>
+  </div>
+  <div class="control-group">
+    <%= f.label :city_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :city_id,set_cities.collect{|c|[c.name, c.id]},{} ,:class => 'form-control' %>
+    </div>
+    <%= error_span(@property[:city_id]) %>
+  </div>
+
+
+  <%= f.submit nil, :class => 'btn btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+            properties_path, :class => 'btn btn-default' %>
+
+<% end %>
